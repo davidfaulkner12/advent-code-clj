@@ -13,4 +13,5 @@
   (are [x y] (= (check-triplet-crazy x) y)
     ["1-3" "a:" "abcde"] true
     ["1-3" "b:" "cdefg"] false
-    ["2-9" "c:" "ccccccccc"] false))
+    ["2-9" "c:" "ccccccccc"] false
+    ["1-3" "a:" "cbade"] true)) ; Not an example but I screwed this up at first
