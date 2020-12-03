@@ -8,18 +8,12 @@
     (and a (not b))
     (and (not a) b)))
 
-(defn crazy-filter [rangestr]
-    (let [[start end] (parent/rangestr-to-ints rangestr)]
-      (fn [character password]
-        (xor
-          (= character (get password (- start 1)))
-          (= character (get password (- end 1)))))))
-
-(defn check-triplet-crazy [[rangestr characterplus password]]
-  (let [testfn (crazy-filter rangestr)
-        testchar (first characterplus)]
-       (testfn testchar password)))
+(defn make-position-filter [start end]
+  (fn [character password]
+    (xor
+      (= character (get password (- start 1)))
+      (= character (get password (- end 1))))))
 
 (defmethod ifaces/run-problem "day2-2020-2" [x y]
-  (let [triplet-vec (parent/parse-data y)]
-    (count (filter check-triplet-crazy triplet-vec))))
+  (let [parsed-data (parent/parse-split-data (parent/split-data y))]
+    (count (filter (parent/check-line make-position-filter) parsed-data))))

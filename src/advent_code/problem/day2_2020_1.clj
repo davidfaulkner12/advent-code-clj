@@ -3,25 +3,25 @@
             [advent-code.data-helpers :as dh]
             [clojure.math.combinatorics :as combo]))
 
-(defn rangestr-to-ints [rangestr]
-  (let [[startc endc] (clojure.string/split rangestr #"\-")]
-    [(Integer/parseInt startc) (Integer/parseInt endc)]))
+(defn make-count-filter [start end]
+  (fn [character password]
+    (let [count-chars (count (filter #(= character %) password))]
+      (<= start count-chars end))))
 
-(defn count-range-filter [rangestr]
-    (let [[start end] (rangestr-to-ints rangestr)]
-      (fn [character password]
-        (let [count-chars (count (re-seq (re-pattern character) password))]
-          (and (<= start count-chars)
-               (<= count-chars end))))))
+(defn check-line [make-filter]
+  (fn [[start end char password]]
+    (let [testfn (make-filter start end)]
+      (testfn char password))))
 
-(defn check-triplet-count [[rangestr characterplus password]]
-  (let [testfn (count-range-filter rangestr)
-        testchar (str (first characterplus))]
-       (testfn testchar password)))
+(defn parse-single-line [[_ startstr endstr charstr password]]
+  [(Integer/parseInt startstr) (Integer/parseInt endstr) (first charstr) password])
 
-(defn parse-data [raw]
-    (map #(clojure.string/split % #"\s") (clojure.string/split raw #"\n")))
+(defn parse-split-data [split-data]
+  (map parse-single-line split-data))
+
+(defn split-data [raw]
+  (re-seq #"(\d+)-(\d+) (\w): (\w+).*\n?" raw))
 
 (defmethod ifaces/run-problem "day2-2020-1" [x y]
-  (let [triplet-vec (parse-data y)]
-    (count (filter check-triplet-count triplet-vec))))
+  (let [parsed-data (parse-split-data (split-data y))]
+    (count (filter (check-line make-count-filter) parsed-data))))
