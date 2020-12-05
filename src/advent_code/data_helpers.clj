@@ -9,5 +9,11 @@
 (defn wrap-vec [arg]
   (str "[" arg "]"))
 
+(defn wrap-map [arg]
+  (str "{" arg "}"))
+
 (defn to-edn-vec [arg]
   (to-edn (wrap-vec arg)))
+
+(defn to-edn-map [arg]
+  (to-edn (wrap-map arg)))
