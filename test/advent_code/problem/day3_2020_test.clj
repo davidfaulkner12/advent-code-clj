@@ -1,5 +1,6 @@
 (ns advent-code.problem.day3-2020-test
   (:require [clojure.test :refer :all]
+            [advent-code.interfaces :as ifaces]
             [advent-code.problem.day3-2020-1 :refer :all]))
 
 (def example-map "..##.......
