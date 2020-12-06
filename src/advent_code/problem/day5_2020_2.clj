@@ -3,7 +3,6 @@
             [advent-code.interfaces :as ifaces]
             [advent-code.problem.day5-2020-1 :as parent]))
 
-
 (defmethod ifaces/run-problem "day5-2020-2" [x y]
   (let [parsed-data (parent/parse-data y)
         occupied-rows-and-cols (set (map parent/rowcol-for-boarding-pass parsed-data))
