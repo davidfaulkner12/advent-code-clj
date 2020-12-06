@@ -37,4 +37,4 @@
        (valid-hgt? (passport-map "hgt"))))
 
 (defmethod ifaces/run-problem "day4-2020-2" [x y]
-  (count (filter really-valid-passport? (map parent/parse-passport-to-map (parent/split-data y)))))
+  (count (filter really-valid-passport? (map parent/parse-passport-to-map (dh/split-paragraphs y)))))

@@ -17,3 +17,9 @@
 
 (defn to-edn-map [arg]
   (to-edn (wrap-map arg)))
+
+(defn split-lines [data]
+  (clojure.string/split data #"\n"))
+
+(defn split-paragraphs [data]
+  (clojure.string/split data #"\n\n"))

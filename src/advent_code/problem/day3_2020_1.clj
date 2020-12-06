@@ -23,7 +23,7 @@
               (recur new-x new-y num-trees)))))))
 
 (defn parse-data [raw]
-  (map seq (clojure.string/split raw #"\n")))
+  (map seq (dh/split-lines raw)))
 
 (defmethod ifaces/run-problem "day3-2020-1" [x y]
   (let [parsed-data (parse-data y)]

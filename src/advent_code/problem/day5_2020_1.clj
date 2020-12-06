@@ -1,8 +1,9 @@
 (ns advent-code.problem.day5-2020-1
-  (:require [advent-code.interfaces :as ifaces]))
+  (:require [advent-code.interfaces :as ifaces]
+            [advent-code.data-helpers :as dh]))
 
 (defn parse-data [raw]
-  (map seq (clojure.string/split raw #"\n")))
+  (map seq (dh/split-lines raw)))
 
 (defn boarding-pass-reducer [boarding-pass]
   (reduce (fn [[minrow maxrow mincol maxcol] char]
