@@ -1,4 +1,4 @@
-(ns advent-code.problem.day3-2020-1
+(ns advent-code.problem.day3-2020
   (:require [advent-code.interfaces :as ifaces]
             [advent-code.data-helpers :as dh]))
 
@@ -25,6 +25,15 @@
 (defn parse-data [raw]
   (map seq (dh/split-lines raw)))
 
-(defmethod ifaces/run-problem "day3-2020-1" [x y]
-  (let [parsed-data (parse-data y)]
+(defmethod ifaces/run-problem ["day3-2020" "1" ][x y z]
+  (let [parsed-data (parse-data z)]
     (calculate-trees (make-slope 3 1) parsed-data)))
+
+(defmethod ifaces/run-problem ["day3-2020" "2"] [x y z]
+  (let [parsed-data (parse-data z)]
+    (*
+      (calculate-trees (make-slope 1 1) parsed-data)
+      (calculate-trees (make-slope 3 1) parsed-data)
+      (calculate-trees (make-slope 5 1) parsed-data)
+      (calculate-trees (make-slope 7 1) parsed-data)
+      (calculate-trees (make-slope 1 2) parsed-data))))

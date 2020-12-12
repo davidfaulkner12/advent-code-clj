@@ -9,9 +9,10 @@
   (require (problem-ns-symbol problem-name) :reload))
 
 (defn -main
-  [& args]
+  [day problem file]
   (do
-    (load-problem-ns (first args))
+    (load-problem-ns day)
     (println
-       (ifaces/run-problem (first args)
-                           (slurp (second args))))))
+       (ifaces/run-problem day
+                           problem
+                           (slurp file)))))

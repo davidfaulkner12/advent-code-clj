@@ -6,5 +6,5 @@
   (- (quot mass 3) 2))
 
 
-(defmethod ifaces/run-problem "day1-2019" [x y]
-  (apply + (map mass->fuel (dh/to-edn-vec y))))
+(defmethod ifaces/run-problem ["day1-2019" 1] [x y z]
+  (apply + (map mass->fuel (dh/to-edn-vec z))))

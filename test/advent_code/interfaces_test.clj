@@ -2,24 +2,13 @@
   (:require [clojure.test :refer :all]
             [advent-code.interfaces :refer :all]))
 
-(defmethod run-problem "always-bob" [x y] "bob")
-(defmethod run-problem "pass-through" [x y] y)
+(defmethod run-problem ["always-bob" "1"] [x y z] "bob")
+(defmethod run-problem ["pass-through" "1"] [x y z] z)
 
 (deftest always-bob
   (is (= "bob"
-         (run-problem "always-bob" "steve"))))
+         (run-problem "always-bob" "1" "steve"))))
 
 (deftest pass-through
   (is (= "steve"
-         (run-problem "pass-through" "steve"))))
-
-(defmethod string->data "always-one" [x y] 1)
-(defmethod string->data "pass-through" [x y] y)
-
-(deftest s->d-one
-  (is (= 1
-         (string->data "always-one" 42))))
-
-(deftest s->d->pass
-  (is (= 42
-         (string->data "pass-through" 42))))
+         (run-problem "pass-through" "1" "steve"))))
