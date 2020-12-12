@@ -42,8 +42,8 @@ Ran 2 tests containing 5 assertions.
 You can execute a specific AoC problem from the command line as follows:
 
 ```bash
-% lein run day1-2019 resources/2019-day1.input
-3479429
+% lein run day1-2020 1 resources/2020-day1.input
+381699
 ```
 
 And of course all of the unit tests can be run:
@@ -72,11 +72,11 @@ a single common function that each problem defines:
 
 ```clojure
 ; Lookup the method by the problem string
-(defmulti run-problem (fn [problem data] problem))
+(defmulti run-problem (fn [day problem data] problem))
 ```
 
 `data` here is intended to be the *raw* data you can download from the AoC site.
-Specifically, we `slurp` the second argument in command line mode. In the REPL,
+Specifically, we `slurp` the third argument in command line mode. In the REPL,
 you can do the same thing:
 
 ```clojure
@@ -100,7 +100,7 @@ We do some dynamic namespace trickery in both `dev/user.clj` and
 
 ## License
 
-Copyright © 2020 David Wang-Faulkner
+Copyright © 2020 Ethel Weston
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
