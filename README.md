@@ -100,7 +100,7 @@ We do some dynamic namespace trickery in both `dev/user.clj` and
 
 ## License
 
-Copyright © 2020 Ethel Weston
+Copyright © 2020 David Wang-Faulkner
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
