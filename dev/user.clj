@@ -18,6 +18,6 @@
 ;
 ; (def parsed-data (dh/to-edn-vec data))
 ;
-(time (run-tests 'advent-code.problem.day14-2020-test))
+; (time (run-tests 'advent-code.problem.day14-2020-test))
 
 ; (def example-line (first (split-lines example)))
