@@ -1,8 +1,6 @@
 (ns advent-code.problem.day11-2020
-  (:require [clojure.set :as set]
-            [advent-code.interfaces :as ifaces]
-            [advent-code.data-helpers :as dh]
-            [clojure.set :as set]))
+  (:require [advent-code.interfaces :as ifaces]
+            [advent-code.data-helpers :as dh]))
 
 (defn parse-data [raw]
   (mapv vec (dh/split-lines raw)))

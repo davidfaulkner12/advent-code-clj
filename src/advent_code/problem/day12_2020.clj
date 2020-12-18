@@ -1,8 +1,7 @@
 (ns advent-code.problem.day12-2020
   (:require [clojure.set :as set]
             [advent-code.interfaces :as ifaces]
-            [advent-code.data-helpers :as dh]
-            [clojure.set :as set]))
+            [advent-code.data-helpers :as dh]))
 
 (defn parse-data [raw]
   (map (fn [[_ cmd amt]] [cmd (Integer/parseInt amt)])

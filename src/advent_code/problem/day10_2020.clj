@@ -1,8 +1,6 @@
 (ns advent-code.problem.day10-2020
-  (:require [clojure.set :as set]
-            [advent-code.interfaces :as ifaces]
-            [advent-code.data-helpers :as dh]
-            [clojure.set :as set]))
+  (:require [advent-code.interfaces :as ifaces]
+            [advent-code.data-helpers :as dh]))
 
 (defn sequential-diffs [data]
   (let [sorted-data (sort (conj data 0))

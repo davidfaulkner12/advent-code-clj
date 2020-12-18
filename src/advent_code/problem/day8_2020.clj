@@ -1,6 +1,5 @@
 (ns advent-code.problem.day8-2020
-  (:require [clojure.set :as set]
-            [advent-code.interfaces :as ifaces]
+  (:require [advent-code.interfaces :as ifaces]
             [advent-code.data-helpers :as dh]))
 
 (defn make-instructions [raw]

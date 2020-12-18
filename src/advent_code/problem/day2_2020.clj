@@ -1,7 +1,6 @@
 (ns advent-code.problem.day2-2020
   (:require [advent-code.interfaces :as ifaces]
-            [advent-code.data-helpers :as dh]
-            [clojure.math.combinatorics :as combo]))
+            [advent-code.data-helpers :as dh]))
 
 (defn make-count-filter [start end]
   (fn [character password]
