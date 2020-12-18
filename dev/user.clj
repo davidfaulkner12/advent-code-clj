@@ -5,8 +5,8 @@
             [advent-code.data-helpers-test :as dh-test]
             [advent-code.interfaces-test :as ifaces-test]
             [clojure.test :refer [run-tests]]
-            [advent-code.problem.day14-2020 :refer :all]
-            [advent-code.problem.day14-2020-test :refer :all]))
+            [advent-code.problem.day15-2020 :refer :all]
+            [advent-code.problem.day15-2020-test :refer :all]))
 
 (defn test-problem [problem]
   (let [problem-test (str problem "-test")]
@@ -14,10 +14,10 @@
     (load-problem-ns problem-test)
     (run-tests (problem-ns-symbol problem-test))))
 
-; (def data (slurp "resources/2020-day9.input"))
+; (def data (slurp "resources/2020-day15.input"))
 ;
 ; (def parsed-data (dh/to-edn-vec data))
 ;
-; (time (run-tests 'advent-code.problem.day14-2020-test))
+; (time (run-tests 'advent-code.problem.day15-2020-test))
 
 ; (def example-line (first (split-lines example)))
