@@ -5,8 +5,8 @@
             [advent-code.data-helpers-test :as dh-test]
             [advent-code.interfaces-test :as ifaces-test]
             [clojure.test :refer [run-tests]]
-            [advent-code.problem.day16-2020 :refer :all]
-            [advent-code.problem.day16-2020-test :refer :all]))
+            [advent-code.problem.day19-2020 :refer :all]
+            [advent-code.problem.day19-2020-test :refer :all]))
 
 (defn test-problem [problem]
   (let [problem-test (str problem "-test")]
@@ -18,6 +18,9 @@
 ;
 ; (def parsed-data-1 (dh/split-paragraphs data))
 ; ;
-(time (run-tests 'advent-code.problem.day16-2020-test))
+(time (run-tests 'advent-code.problem.day19-2020-test))
 
 ; (def example-line (first (split-lines example)))
+
+(def evens (iterate (partial + 2) 2))
+(def odds (iterate (partial + 2) 3))
