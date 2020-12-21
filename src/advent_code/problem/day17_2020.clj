@@ -1,7 +1,8 @@
 (ns advent-code.problem.day17-2020
   (:require [advent-code.interfaces :as ifaces]
             [advent-code.data-helpers :as dh]
-            [clojure.set :as set]))
+            [clojure.set :as set]
+            [clojure.math.combinatorics :as combo]))
 
 (defn parse-map [raw-map start-x start-y z]
   (let [row-cols (mapv vec (dh/split-lines raw-map))]
@@ -10,14 +11,16 @@
                :when (= \# (get-in row-cols [y x]))]
            [(+ x start-x) (+ y start-y) z]))))
 
-(def adjacency-moves
-  (for [x [-1 0 1]
-        y [-1 0 1]
-        z [-1 0 1]]
-    [x y z]))
+(defn create-adjacency-moves [c]
+  (apply combo/cartesian-product (repeat c [-1 0 1])))
 
-(defn create-adjacency-for-point [[x y z]]
-  (map (fn [[adj-x adj-y adj-z]] [(+ adj-x x) (+ adj-y y) (+ adj-z z)]) adjacency-moves))
+(def create-adjacency-moves-memo (memoize create-adjacency-moves))
+
+(defn add-points [p1 p2]
+  (mapv + p1 p2))
+
+(defn create-adjacency-for-point [p]
+  (map (partial add-points p) (create-adjacency-moves (count p))))
 
 (defn all-adjacent-points [point-set]
   (set (apply concat (map create-adjacency-for-point point-set))))
@@ -47,4 +50,15 @@
 
 (defmethod ifaces/run-problem ["day17-2020" "1"] [x y z]
   (let [point-map (parse-map z 0 0 0)]
+    (count-cycles point-map 6)))
+
+(defn parse-map-4d [raw-map start-x start-y z w]
+  (let [row-cols (mapv vec (dh/split-lines raw-map))]
+    (set (for [x (range (count (first row-cols)))
+               y (range (count row-cols))
+               :when (= \# (get-in row-cols [y x]))]
+           [(+ x start-x) (+ y start-y) z w]))))
+
+(defmethod ifaces/run-problem ["day17-2020" "2"] [x y z]
+  (let [point-map (parse-map-4d z 0 0 0 0)]
     (count-cycles point-map 6)))

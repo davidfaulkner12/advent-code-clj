@@ -51,5 +51,17 @@
     6 112))
 
 (deftest actual-problem-1
-  (is (= 4
+  (is (= 333
          (ifaces/run-problem "day17-2020" "1" (slurp "resources/2020-day17.input")))))
+
+(def example-1-4d (parse-map-4d raw-example-1 -1 -1 0 0))
+
+(deftest test-count-cycles-4d
+  (are [x y] (= y (count-cycles example-1-4d x))
+    0 5
+    1 29
+    6 848))
+
+(deftest actual-problem-2
+  (is (= 2676
+         (ifaces/run-problem "day17-2020" "2" (slurp "resources/2020-day17.input")))))
