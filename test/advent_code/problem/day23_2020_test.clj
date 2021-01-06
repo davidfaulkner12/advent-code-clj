@@ -29,5 +29,5 @@
          (ifaces/run-problem "day23-2020" "2" raw-example))))
 
 (deftest test-actual-problem-2
-  (is (= 149245887792
+  (is (= 2000455861
          (ifaces/run-problem "day23-2020" "2" (slurp "resources/2020-day23.input")))))
