@@ -12,11 +12,18 @@
   (let [split-tiles (dh/split-paragraphs raw)]
     (map parse-tile split-tiles)))
 
+(defn inside-vec [pvector]
+  (subvec pvector 1 (- (count pvector) 1)))
+
+(defn generate-inside-for-tile [tile]
+  (mapv inside-vec (inside-vec (:tiles tile))))
+
 (defn edges-for-tile [tile]
   {:top (first (:tiles tile))
    :bottom (last (:tiles tile))
    :left (map first (:tiles tile))
-   :right (map last (:tiles tile))})
+   :right (map last (:tiles tile))
+   :inside (generate-inside-for-tile tile)})
 
 (defn populate-edges-for-tiles [tiles]
   (map (fn [tile] (into (dissoc tile :tiles) (edges-for-tile tile))) tiles))
@@ -26,6 +33,16 @@
 ; right: 4->3
 ; bottom: 2->3
 
+(defn rotate-matrix-90 [insides]
+  (let [n (count insides)]
+    (reduce (fn [outtile [x y val]]
+                (assoc-in outtile [x y] val))
+        insides
+        (for [x (range n)
+              y (range n)
+              :let [val (get-in insides [x y])]]
+          [(- n y 1) x val]))))
+
 (defn rotate-90 [tile]
   (let [{:keys [id top bottom left right]} tile]
     {:id id
@@ -33,7 +50,8 @@
      :top right
      :right (reverse bottom)
      :bottom left
-     :left (reverse top)}))
+     :left (reverse top)
+     :inside (rotate-matrix-90 (:inside tile))}))
 
 (defn rotate-180 [tile]
   (let [{:keys [id top bottom left right]} tile]
@@ -42,7 +60,8 @@
      :top (reverse bottom)
      :right (reverse left)
      :bottom (reverse top)
-     :left (reverse right)}))
+     :left (reverse right)
+     :inside (rotate-matrix-90 (rotate-matrix-90 (:inside tile)))}))
 
 (defn rotate-270 [tile]
   (let [{:keys [id top bottom left right]} tile]
@@ -51,7 +70,11 @@
      :top (reverse left)
      :right top
      :bottom (reverse right)
-     :left bottom}))
+     :left bottom
+     :inside (rotate-matrix-90 (rotate-matrix-90 (rotate-matrix-90 (:inside tile))))}))
+
+(defn flip-matrix-horizontal [insides]
+  (vec (rseq insides)))
 
 (defn flip-horizontal [tile]
   (let [{:keys [id top bottom left right]} tile]
@@ -60,7 +83,11 @@
      :top bottom
      :right (reverse right)
      :bottom top
-     :left (reverse left)}))
+     :left (reverse left)
+     :inside (flip-matrix-horizontal (:inside tile))}))
+
+(defn flip-matrix-vertical [insides]
+  (mapv #(vec (rseq %)) insides))
 
 (defn flip-vertical [tile]
   (let [{:keys [id top bottom left right]} tile]
@@ -69,7 +96,8 @@
      :top (reverse top)
      :right left
      :bottom (reverse bottom)
-     :left right}))
+     :left right
+     :inside (flip-matrix-vertical (:inside tile))}))
 
 (defn flip-diagonal-1 [tile]
   (let [{:keys [id top bottom left right]} tile]
@@ -78,7 +106,10 @@
      :top left
      :right bottom
      :bottom right
-     :left top}))
+     :left top
+     ; flip-vertical and then rotate
+     :inside (flip-matrix-horizontal (rotate-matrix-90 (:inside tile)))}))
+
 
 (defn flip-diagonal-2 [tile]
   (let [{:keys [id top bottom left right]} tile]
@@ -87,7 +118,9 @@
      :top (reverse right)
      :right (reverse top)
      :bottom (reverse left)
-     :left (reverse bottom)}))
+     :left (reverse bottom)
+     ; flip-horizontal and then rotate 90
+     :inside (flip-matrix-vertical (rotate-matrix-90 (:inside tile)))}))
 
 (defn transformation-set-tile [tile]
   [tile
@@ -199,3 +232,66 @@
 (defmethod ifaces/run-problem ["day20-2020" "1"] [x y z]
   (let [solution (solve-map (parse-data z))]
     (multiply-corners solution)))
+
+(defn inside-map [solution]
+  (let [outside-n (int (Math/sqrt (count solution)))
+        inside-n (count (get-in solution [[0 0] :inside]))
+        new-map (mapv (fn [_] (vec (repeat (* outside-n inside-n) nil))) (repeat (* outside-n inside-n) nil))]
+    (reduce (fn [cur-map [row col val]]
+              (assoc-in cur-map [row col] val))
+      new-map
+      (for [out-x (range 0 outside-n)
+            out-y (range 0 outside-n)
+            inside-x (range 0 inside-n)
+            inside-y (range 0 inside-n)]
+            ;:when (and (= out-x 2) (= out-y 1))]
+          [(+ (* (- outside-n out-y 1) inside-n) inside-y)
+           (+ (* out-x inside-n) inside-x)
+           (get-in (:inside (solution [out-x out-y])) [inside-y inside-x])]))))
+
+(defn print-inside-map [inside-map]
+  (dorun (map println inside-map)))
+
+(def sea-monster
+  (mapv vec
+    ["                  #  "
+     "#    ##    ##    ### "
+     " #  #  #  #  #  #    "]))
+
+(def sea-monster-coords
+  (for [row (range (count sea-monster))
+        col (range (count (first sea-monster)))
+        :when (= \# (get-in sea-monster [row col]))]
+    [row col]))
+
+(defn is-sea-monster? [inside-map [row col]]
+  (every?
+    (fn [[monster-row monster-col]]
+      (= \# (get-in inside-map [(+ row monster-row) (+ col monster-col)])))
+    sea-monster-coords))
+
+(defn find-sea-monsters [inside-map]
+  (let [test-coords (for [row (range (count inside-map))
+                          col (range (count (first inside-map)))]
+                      [row col])]
+    (filter (partial is-sea-monster? inside-map) test-coords)))
+
+(defn find-sea-monsters-all-rotations [inside-map]
+  (let [transform-set-map [inside-map
+                           (rotate-matrix-90 inside-map)
+                           (rotate-matrix-90 (rotate-matrix-90 inside-map))
+                           (rotate-matrix-90 (rotate-matrix-90 (rotate-matrix-90 inside-map)))
+                           (flip-matrix-horizontal inside-map)
+                           (flip-matrix-vertical inside-map)
+                           (flip-matrix-vertical (rotate-matrix-90 inside-map))
+                           (flip-matrix-horizontal (rotate-matrix-90 inside-map))]]
+    (first (filter #(not (empty? %)) (map find-sea-monsters transform-set-map)))))
+
+(defmethod ifaces/run-problem ["day20-2020" "2"] [x y z]
+  (let [data (parse-data z)
+        solution (solve-map data)
+        insides (inside-map solution)
+        sea-monsters (find-sea-monsters-all-rotations insides)
+        sea-monster-dots (count sea-monster-coords)]
+    (- (count (filter (partial = \#) (flatten insides)))
+       (* (count sea-monsters) sea-monster-dots))))
