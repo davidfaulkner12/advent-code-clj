@@ -63,6 +63,15 @@ Ran 10 tests containing 13 assertions.
 0 failures, 0 errors.
 ```
 
+As of completing all of these problems 16 Jan 2021, running the full unit test
+suite (which runs every test problem and most examples) takes:
+
+```bash
+lein test  553.76s user 14.84s system 16% cpu 58:40.42 total
+```
+I have not taken time to optimise this heavily, nor do I intend to. *Maybe* I'll
+do ClojureScript at some point just to see. :-)
+
 I haven't bothered building an uberjar but it's there. :-)
 
 ## High-level Design
